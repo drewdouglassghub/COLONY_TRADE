@@ -130,7 +130,7 @@ class CvEventManager:
 			'playerGoldTrade'		: self.onPlayerGoldTrade,
 			'windowActivation'		: self.onWindowActivation,
 			'cityScreenOpen'		: self.onCityScreenOpen,
-			'onClickedButton'		: self.onClickedButton,
+			'doTradeRequestEvent'	: self.doTradeRequestEvent,
 			'gameUpdate'			: self.onGameUpdate,		# sample generic event
 		}
 
@@ -162,9 +162,13 @@ class CvEventManager:
 		'EventMgr entry point'
 		# extract the last 6 args in the list, the first arg has already been consumed
 		self.origArgsList = argsList	# point to original
-		tag = argsList[0]				# event type string
+		tag = argsList[0]	
+  # event type string
+		if tag == 'doTradeRequestEvent':
+			self.doTradeRequestEvent(argsList)
+
 		idx = len(argsList)-6
-		bDummy = false
+		bDummy = False	
 		self.bDbg, bDummy, self.bAlt, self.bCtrl, self.bShift, self.bAllowCheats = argsList[idx:]
 		ret = 0
 		if self.EventHandlerMap.has_key(tag):
@@ -200,8 +204,6 @@ class CvEventManager:
 		return 0
 
 			
-	if eventType == 'onClickedButton':
-		self.onClickedButton(argsList[1:])
 
 #################### ON EVENTS ######################
 	def onKbdEvent(self, argsList):
@@ -761,30 +763,34 @@ class CvEventManager:
 
 	def onMouseEvent(self, argsList):
 		'mouse handler - returns 1 if the event was consumed'
+		
 		eventType,mx,my,px,py,interfaceConsumed,screens = argsList
 		if ( px!=-1 and py!=-1 ):
-			if ( eventType == self.EventLButtonDown ):
-				if (self.bAllowCheats and self.bCtrl and self.bAlt and CyMap().plot(px,py).isCity() and not interfaceConsumed):
-					# Launch Edit City Event
-					self.beginEvent( CvUtil.EventEditCity, (px,py) )
-					return 1
+			if ( eventType == self.EventBack ):
+				return CvScreensInterface.handleBack(screens)
+			elif ( eventType == self.EventForward ):
+				return CvScreensInterface.handleForward(screens)
 
-				elif (self.bAllowCheats and self.bCtrl and self.bShift and not interfaceConsumed):
-					# Launch Place Object Event
-					self.beginEvent( CvUtil.EventPlaceObject, (px, py) )
-					return 1
+		if (self.bAllowCheats and self.bCtrl and self.bAlt and CyMap().plot(px,py).isCity() and not interfaceConsumed):
+			# Launch Edit City Event
+			self.beginEvent( CvUtil.EventEditCity, (px,py) )
+			return 1
 
-		if ( eventType == self.EventBack ):
-			return CvScreensInterface.handleBack(screens)
-		elif ( eventType == self.EventForward ):
-			return CvScreensInterface.handleForward(screens)
+		elif (self.bAllowCheats and self.bCtrl and self.bShift and not interfaceConsumed):
+			# Launch Place Object Event
+			self.beginEvent( CvUtil.EventPlaceObject, (px, py) )
+			return 1
 
 		return 0
 
 
-	def onClickedButton(self, argsList):
+	def doTradeRequestEvent(self, argsList):
 		popupType = argsList[0]
 		selection = argsList[1]
+		CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10,
+										"Trade Route Created", "", 0, "",
+										gc.getInfoTypeForString("COLOR_BLUE"), 0, 0,
+										False, False)
 
 		if popupType == ButtonPopupTypes.BUTTONPOPUP_PYTHON:
 			if selection == 0:

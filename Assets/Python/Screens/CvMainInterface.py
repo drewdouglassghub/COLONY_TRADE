@@ -2950,25 +2950,20 @@ class CvMainInterface:
 		global MAP_MANAGMENT_PANEL_UP
 
 		if (inputClass.getNotifyCode() == NotifyCode.NOTIFY_CLICKED):
+			CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "CLICK", "", 0, "", gc.getInfoTypeForString("COLOR_RED"), 0, 0, False, False)
+			if (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == 5001) :
+				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Attempting Trade", "", 0, "", gc.getInfoTypeForString("COLOR_RED"), 0, 0, False, False)
+				self.showTradePartnerScreen()
+				return 1
 
-
-			if (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == BUILDING_MANAGMENT_TOGGLE):
+			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == BUILDING_MANAGMENT_TOGGLE):
 				BUILDING_MANAGMENT_PANEL_UP = True
 				AUTOMATION_MANAGMENT_PANEL_UP, MAP_MANAGMENT_PANEL_UP = False, False
 				self.updateSelectionButtons()
 
-			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == 5001) :
-				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Attempting Trade", "", 0, "", gc.getInfoTypeForString("COLOR_RED"), 0, 0, False, False)
-				popup = CyPopupInfo()
-				popup.setButtonPopupType(ButtonPopupTypes.BUTTONPOPUP_PYTHON)
-				popup.setText("Choose a trade region to open:")
-
-				popup.addPythonButton("Locals", "")
-				popup.addPythonButton("Africa", "")
-				popup.addPythonButton("Caribbean", "")
-				popup.addPythonButton("Cancel", "")
-
-				popup.addPopup(gc.getGame().getActivePlayer())
+			# elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == 5001) :
+			# 	CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Attempting Trade", "", 0, "", gc.getInfoTypeForString("COLOR_RED"), 0, 0, False, False)
+	
 
 
 			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == AUTOMATION_MANAGMENT_TOGGLE):
@@ -3011,10 +3006,67 @@ class CvMainInterface:
 								"Trade screen method", "", 0, "",
 								gc.getInfoTypeForString("COLOR_RED"), 0, 0,
 								False, False)
+		popup = CyPopupInfo()
+		popup.setButtonPopupType(ButtonPopupTypes.BUTTONPOPUP_PYTHON)
+		popup.setText("Choose a trade region to open:")
+
+		popup.addPythonButton("Locals", "")
+		popup.addPythonButton("Africa", "")
+		popup.addPythonButton("Caribbean", "")
+		popup.addPythonButton("Cancel", "")
+
+		popup.addPopup(gc.getGame().getActivePlayer())
 		# Close Main Screen if open
-		screen.hide("MainInterface")
-		screen2 = CyGInterfaceScreen("TradePartnerScreen", CvScreenEnums.TRADE_PARTNER_SCREEN)
-		screen2.setDimensions(0, 0, screen.getXResolution(), screen.getYResolution())
-		screen2.showScreen(PopupStates.POPUPSTATE_IMMEDIATE, False)
-		screen2.setActive(True)
+# 		self.doTradeRequestEvent()
+# 		screen = CyGInterfaceScreen("MainInterface", CvScreenEnums.MAIN_INTERFACE )
+# 		screen.hideScreen()
+# 		self.CvTradePartnerScreen.CvTradePartnerScreen().interfaceScreen()
+# 		return 0
+# 	def doTradeRequestEvent(self):
+# 		pPlayer = gc.getPlayer(gc.getGame().getActivePlayer())
+# 		if pPlayer.isAlive():
+# 			CyMessageControl().sendModNetMessage(7001, -1, -1, "", gc.getGame().getActivePlayer(), -1, -1)
+# 		return 0
+# 	# Will hide the showTradePartnerScreen Screen
+ 
+# 	def hideTradePartnerScreen(self):	
+     
+# 		screen = CyGInterfaceScreen("TradePartnerScreen", CvScreenEnums.TRADE_PARTNER_SCREEN )
+# 		screen.hideScreen()
+# 		screen = CyGInterfaceScreen("MainInterface", CvScreenEnums.MAIN_INTERFACE )
+# 		screen.showScreen()
+# 		return 0	
+# 	def isTradeScreenUp(self):
+# 		screen = CyGInterfaceScreen("TradePartnerScreen", CvScreenEnums.TRADE_PARTNER_SCREEN )
+# 		return screen.isActive()		
+# # Will update the selection buttons
+# 	def updateSelectionButtons( self ):
+# 		screen = CyGInterfaceScreen("MainInterface", CvScreenEnums.MAIN_INTERFACE )
+# 		xResolution = screen.getXResolution()
+# 		yResolution = screen.getYResolution()
+
+# 		if (CyInterface().getShowInterface() == InterfaceVisibility.INTERFACE_HIDE_ALL or CyEngine().isGlobeviewUp()):
+# 			screen.hide("BuildingManagementToggle")
+# 			screen.hide("AutomationManagementToggle")
+# 			screen.hide("MapManagementToggle")
+# 			return
+
+# 		if BUILDING_MANAGMENT_PANEL_UP:
+# 			screen.setState("BuildingManagementToggle", True)
+# 		else:
+# 			screen.setState("BuildingManagementToggle", False)
+
+# 		if AUTOMATION_MANAGMENT_PANEL_UP:
+# 			screen.setState("AutomationManagementToggle", True)
+# 		else:
+# 			screen.setState("AutomationManagementToggle", False)
+
+# 		if MAP_MANAGMENT_PANEL_UP:
+# 			screen.setState("MapManagementToggle", True)
+# 		else:
+# 			screen.setState("MapManagementToggle", False)
+
+# 		screen.show("BuildingManagementToggle")
+# 		screen.show("AutomationManagementToggle")
+# 		screen.show("MapManagementToggle")
 
