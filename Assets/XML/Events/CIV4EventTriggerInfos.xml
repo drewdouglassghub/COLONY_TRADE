@@ -1519,9 +1519,9 @@
 			<PythonCallback/>
 		</EventTriggerInfo>
 		<EventTriggerInfo>
-			<Type>EVENT_TRIGGER_REQUEST_TRADE</Type>
-			<Description>TXT_KEY_EVENT_TRIGGER_REQUEST_TRADE</Description>
-			<Event>EVENT_TRADE_REQUEST</Event>
+			<Type>EVENT_TRIGGER_SUMMON_TRADE_MINISTER</Type>
+			<Description>TXT_KEY_EVENT_TRIGGER_SUMMON_TRADE_MINISTER</Description>
+			<Event>SUMMON_TRADE_MINISTER</Event>
 			<TriggerType>TRIGGER_TYPE_GENERIC</TriggerType>
 			<WorldNews>false</WorldNews>
 			<SinglePlayer>true</SinglePlayer>
@@ -1550,7 +1550,7 @@
 			<PythonCanDo/>
 			<PythonCanDoCity/>
 			<PythonCanDoUnit/>
-			<PythonCallback>doTradeRequestEvent</PythonCallback>
+			<PythonCallback>summonTradeMinister</PythonCallback>
 			<PythonExpireCheck/>
 			<PythonHelp/>
 			<Button>Art/Interface/Buttons/Events/Trade.dds</Button>

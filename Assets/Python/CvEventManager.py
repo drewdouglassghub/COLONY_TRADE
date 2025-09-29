@@ -784,7 +784,7 @@ class CvEventManager:
 		return 0
 
 
-	def doTradeRequestEvent(self, argsList):
+	def summonTradeMinister(self, argsList):
 		popupType = argsList[0]
 		selection = argsList[1]
 		CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10,
@@ -822,6 +822,7 @@ class CvEventManager:
 		popup.setHeaderString(localText.getText("TXT_KEY_NAME_CITY", ()), CvUtil.FONT_CENTER_JUSTIFY)
 		popup.setBodyString(localText.getText("TXT_KEY_SETTLE_NEW_CITY_NAME", ()), CvUtil.FONT_CENTER_JUSTIFY)
 		popup.createEditBox(city.getName(), 0)
+		popup.setPythonCallback("onTradePartnerSelected")
 		popup.setEditBoxMaxCharCount( 15, 32, 0 )
 		popup.launch(true, PopupStates.POPUPSTATE_IMMEDIATE)
 

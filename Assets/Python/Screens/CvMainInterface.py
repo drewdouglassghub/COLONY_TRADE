@@ -3017,7 +3017,6 @@ class CvMainInterface:
 
 		popup.addPopup(gc.getGame().getActivePlayer())
 		# Close Main Screen if open
-# 		self.doTradeRequestEvent()
 # 		screen = CyGInterfaceScreen("MainInterface", CvScreenEnums.MAIN_INTERFACE )
 # 		screen.hideScreen()
 # 		self.CvTradePartnerScreen.CvTradePartnerScreen().interfaceScreen()
