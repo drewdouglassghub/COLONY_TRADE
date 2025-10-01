@@ -2963,6 +2963,10 @@ class CvMainInterface:
 				popup.setButtonPopupType(ButtonPopupTypes.BUTTONPOPUP_PYTHON)
 				popup.setText("Choose a trade region to open:")
 
+				popup.setImageButton("Local Trade", ArtFileMgr.getInterfaceArtInfo("SCREEN_PIONEER_PORTRAIT").getPath(), iBtnX, (TOP_CENTER_HUD_HEIGHT - self.ADVISOR_BUTTON_SIZE) / 2, self.ADVISOR_BUTTON_SIZE, self.ADVISOR_BUTTON_SIZE, WidgetTypes.WIDGET_GENERAL, TRADE_WITH_PARTNER_BUTTON_ID, -1)
+
+
+
 				popup.addPythonButton("Locals", "")
 				popup.addPythonButton("Africa", "")
 				popup.addPythonButton("Caribbean", "")
