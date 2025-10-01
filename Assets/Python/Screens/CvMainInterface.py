@@ -7,6 +7,7 @@ import CvScreenEnums
 import CvEventInterface
 import time
 import math
+import CvEventManager
 
 # GLOBAL SYSTEM SHORTCUTS
 gc = CyGlobalContext()
@@ -257,6 +258,8 @@ class CvMainInterface:
 	# Sets Global screen construct values based on our Resolution
 	def SetGlobals ( self, screen ):
 
+
+		
 	# GET RESOLUTION
 		global xResolution
 		global yResolution
@@ -446,6 +449,20 @@ class CvMainInterface:
 			size = 4
 		return "<font=" + str(size) + ">" + Text + "</font>"
 
+	
+	# TRADE MINISTER POPUP
+	def launchTradeMinisterPopup(self):
+		CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Attempting Trade", "", 0, "", gc.getInfoTypeForString("COLOR_RED"), 0, 0, False, False)
+		popup = CyPopupInfo()
+		popup.setButtonPopupType(ButtonPopupTypes.BUTTONPOPUP_PYTHON)
+		popup.setData1(9999)  # Unique ID for routing in handleInput
+		popup.setText("Choose a trade partner:")
+		popup.addPythonButton("Locals", "")
+		popup.addPythonButton("Africa", "")
+		popup.addPythonButton("Caribbean", "")
+		popup.addPythonButton("Cancel", "")
+		popup.addPopup(gc.getGame().getActivePlayer())
+  
 	# Will Initialize the majority of Background panels and Widgets
 	def interfaceScreen ( self ):
 		if (CyGame().isPitbossHost()):
@@ -592,18 +609,18 @@ class CvMainInterface:
 
 	# ADVISOR BUTTONS
 		SpaceAvailable = (xResolution / 2) - (TOP_CENTER_HUD_WIDTH / 2)
-		self.ADVISOR_BUTTON_SPACING = SpaceAvailable / 10
+		self.ADVISOR_BUTTON_SPACING = SpaceAvailable / 9
 		
 		self.ADVISOR_BUTTON_SIZE = SMALL_BUTTON_SIZE * 2
 		iBtnX = (xResolution / 2) + (TOP_CENTER_HUD_WIDTH / 2) - (self.ADVISOR_BUTTON_SIZE / 3)
 	
 
 		# TRADE WITH PARTNER BUTTON
-		TRADE_WITH_PARTNER_BUTTON_ID = 5001
-		screen.setImageButton("TradePartnerButton", ArtFileMgr.getInterfaceArtInfo("SCREEN_GOLD_PILE").getPath(), iBtnX, (TOP_CENTER_HUD_HEIGHT - self.ADVISOR_BUTTON_SIZE) / 2, self.ADVISOR_BUTTON_SIZE, self.ADVISOR_BUTTON_SIZE, WidgetTypes.WIDGET_GENERAL, TRADE_WITH_PARTNER_BUTTON_ID, -1)
-		screen.setImageShape("TradePartnerButton", ImageShapes.IMAGE_SHAPE_ELLIPSE, -1)
-		screen.setHitMargins("TradePartnerButton", self.ADVISOR_BUTTON_SIZE / 6, self.ADVISOR_BUTTON_SIZE / 6)
-		self.appendtoHideState(screen, "TradePartnerButton", HIDE_TYPE_MAP, HIDE_LEVEL_HIDE)
+		TRADE_WITH_MINISTER_BUTTON_ID = 5001
+		screen.setImageButton("TradeMinisterButton", ArtFileMgr.getInterfaceArtInfo("SCREEN_GOLD_PILE").getPath(), iBtnX, (TOP_CENTER_HUD_HEIGHT - self.ADVISOR_BUTTON_SIZE) / 2, self.ADVISOR_BUTTON_SIZE, self.ADVISOR_BUTTON_SIZE, WidgetTypes.WIDGET_GENERAL, TRADE_WITH_MINISTER_BUTTON_ID, -1)
+		screen.setImageShape("TradeMinisterButton", ImageShapes.IMAGE_SHAPE_ELLIPSE, -1)
+		screen.setHitMargins("TradeMinisterButton", self.ADVISOR_BUTTON_SIZE / 6, self.ADVISOR_BUTTON_SIZE / 6)
+		self.appendtoHideState(screen, "TradeMinisterButton", HIDE_TYPE_MAP, HIDE_LEVEL_HIDE)
 		iBtnX += self.ADVISOR_BUTTON_SPACING
 
 		screen.setImageButton("DomesticAdvisorButton", ArtFileMgr.getInterfaceArtInfo("INTERFACE_DOMESTIC_ADVISOR").getPath(), iBtnX, (TOP_CENTER_HUD_HEIGHT - self.ADVISOR_BUTTON_SIZE) / 2, self.ADVISOR_BUTTON_SIZE, self.ADVISOR_BUTTON_SIZE, WidgetTypes.WIDGET_ACTION, gc.getControlInfo(ControlTypes.CONTROL_DOMESTIC_SCREEN).getActionInfoIndex(), -1 )
@@ -658,7 +675,7 @@ class CvMainInterface:
 		screen.setImageShape("InfoAdvisorButton", ImageShapes.IMAGE_SHAPE_ELLIPSE, -1)
 		screen.setHitMargins("InfoAdvisorButton", self.ADVISOR_BUTTON_SIZE / 6, self.ADVISOR_BUTTON_SIZE / 6)
 		self.appendtoHideState(screen, "InfoAdvisorButton", HIDE_TYPE_MAP, HIDE_LEVEL_HIDE)
-		iBtnX += self.ADVISOR_BUTTON_SPACING
+		#iBtnX += self.ADVISOR_BUTTON_SPACING
 
 	# MINIMAP RING
 		screen.addPanel("MiniMapRing", u"", u"", True, False, 0, yResolution - SADDLE_HEIGHT, SADDLE_HEIGHT, SADDLE_HEIGHT, PanelStyles.PANEL_STYLE_STANDARD, WidgetTypes.WIDGET_GENERAL, -1, -1 )
@@ -940,8 +957,6 @@ class CvMainInterface:
 		screen.setStyle("EndTurnButton", "Button_HUDEndTurn_Style")
 		screen.setEndTurnState("EndTurnButton", "Red")
 		screen.hide("EndTurnButton")
-
-		
 
 	# BUILDING CONSTRUCTION BAR
 		screen.addStackedBarGFC("CityProductionBar", CITIZEN_BAR_WIDTH + (SMALL_BUTTON_SIZE), yResolution - BOTTOM_CENTER_HUD_HEIGHT - TRANSPORT_AREA_HEIGHT - (STACK_BAR_HEIGHT ), xResolution - CITIZEN_BAR_WIDTH - (MAP_EDGE_MARGIN_WIDTH * 3) - (SMALL_BUTTON_SIZE / 2), STACK_BAR_HEIGHT, InfoBarTypes.NUM_INFOBAR_TYPES, WidgetTypes.WIDGET_HELP_SELECTED, 0, -1 )
@@ -1805,11 +1820,6 @@ class CvMainInterface:
 							if iAngle < 0:
 								self.NADER_SIGN = -1
 							iCount += 1
-
-					screen.setImageButton("DeleteGroupButton", ArtFileMgr.getInterfaceArtInfo("INTERFACE_BUTTONS_SPLITGROUP").getPath(), int(Xcord) - LARGE_BUTTON_SIZE, int(Ycord) - LARGE_BUTTON_SIZE, LARGE_BUTTON_SIZE * 2, LARGE_BUTTON_SIZE * 2, WidgetTypes.WIDGET_DELETE_GROUP, -1, -1)
-					screen.setImageShape("DeleteGroupButton", ImageShapes.IMAGE_SHAPE_ELLIPSE, -1)
-					screen.setHitMargins("DeleteGroupButton", 18, 18)
-
 
 					if (CyInterface().canCreateGroup()):
 						Xcord = (math.sin(math.radians(iAngle * self.NADER_SIGN)) * int(yResolution * self.CENTER_POINT_HEIGHT)) * self.NADER_SIGN * ASPECT_ADJUSTMENT + ((xResolution) / 2)
@@ -2950,31 +2960,12 @@ class CvMainInterface:
 		global MAP_MANAGMENT_PANEL_UP
 
 		if (inputClass.getNotifyCode() == NotifyCode.NOTIFY_CLICKED):
-
-
+			CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "CLICK", "", 0, "", gc.getInfoTypeForString("COLOR_RED"), 0, 0, False, False)
 			if (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == BUILDING_MANAGMENT_TOGGLE):
 				BUILDING_MANAGMENT_PANEL_UP = True
 				AUTOMATION_MANAGMENT_PANEL_UP, MAP_MANAGMENT_PANEL_UP = False, False
 				self.updateSelectionButtons()
-
-			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == 5001) :
-				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Attempting Trade", "", 0, "", gc.getInfoTypeForString("COLOR_RED"), 0, 0, False, False)
-				popup = CyPopupInfo()
-				popup.setButtonPopupType(ButtonPopupTypes.BUTTONPOPUP_PYTHON)
-				popup.setText("Choose a trade region to open:")
-
-				popup.setImageButton("Local Trade", ArtFileMgr.getInterfaceArtInfo("SCREEN_PIONEER_PORTRAIT").getPath(), iBtnX, (TOP_CENTER_HUD_HEIGHT - self.ADVISOR_BUTTON_SIZE) / 2, self.ADVISOR_BUTTON_SIZE, self.ADVISOR_BUTTON_SIZE, WidgetTypes.WIDGET_GENERAL, TRADE_WITH_PARTNER_BUTTON_ID, -1)
-
-
-
-				popup.addPythonButton("Locals", "")
-				popup.addPythonButton("Africa", "")
-				popup.addPythonButton("Caribbean", "")
-				popup.addPythonButton("Cancel", "")
-
-				popup.addPopup(gc.getGame().getActivePlayer())
-
-
+    
 			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == AUTOMATION_MANAGMENT_TOGGLE):
 				AUTOMATION_MANAGMENT_PANEL_UP = True
 				BUILDING_MANAGMENT_PANEL_UP, MAP_MANAGMENT_PANEL_UP = False, False
@@ -2987,13 +2978,17 @@ class CvMainInterface:
 
 			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_CLOSE_SCREEN):
 				CyInterface().clearSelectedCities()		
+    
+			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == 5001) :
+				
+				self.launchTradeMinisterPopup()
 			
 		return 0
 	
 	# Updates the Screen
 	def update( self, fDelta ):
 		return
-
+ 
 	# Adds Mouse Over Help to General Widgets
 	def getWidgetHelp( self, argsList ):
 		iScreen, eWidgetType, iData1, iData2, bOption = argsList
@@ -3007,18 +3002,4 @@ class CvMainInterface:
 				return localText.getText("TXT_KEY_INTERFACE_GOVERNOR_TOGGLE", ());
 
 		return u""
-	
-	import CvTradePartnerScreen
-	# Will show the showTradePartnerScreen Screen
-	def showTradePartnerScreen(self):
-		CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10,
-								"Trade screen method", "", 0, "",
-								gc.getInfoTypeForString("COLOR_RED"), 0, 0,
-								False, False)
-		# Close Main Screen if open
-		screen.hide("MainInterface")
-		screen2 = CyGInterfaceScreen("TradePartnerScreen", CvScreenEnums.TRADE_PARTNER_SCREEN)
-		screen2.setDimensions(0, 0, screen.getXResolution(), screen.getYResolution())
-		screen2.showScreen(PopupStates.POPUPSTATE_IMMEDIATE, False)
-		screen2.setActive(True)
 

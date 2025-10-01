@@ -130,7 +130,7 @@ class CvEventManager:
 			'playerGoldTrade'		: self.onPlayerGoldTrade,
 			'windowActivation'		: self.onWindowActivation,
 			'cityScreenOpen'		: self.onCityScreenOpen,
-			'onClickedButton'		: self.onClickedButton,
+			'EventSummonTradeMinister': self.EventSummonTradeMinister,
 			'gameUpdate'			: self.onGameUpdate,		# sample generic event
 		}
 
@@ -155,7 +155,7 @@ class CvEventManager:
 			CvUtil.EventShowWonder: ('ShowWonder', self.__eventShowWonderApply, self.__eventShowWonderBegin),
 			CvUtil.EventCreateTradeRoute: ('CreateTradeRoute', self.__eventCreateTradeRouteApply, self.__eventCreateTradeRouteBegin),
 			CvUtil.EventEditTradeRoute: ('EditTradeRoute', self.__eventEditTradeRouteApply, self.__eventEditTradeRouteBegin),
-
+			CvUtil.EventSummonTradeMinister: ('SummonTradeMinister', self.__eventSummonTradeMinisterApply, self.__eventSummonTradeMinisterBegin),
 		}
 #################### EVENT STARTERS ######################
 	def handleEvent(self, argsList):
@@ -164,7 +164,7 @@ class CvEventManager:
 		self.origArgsList = argsList	# point to original
 		tag = argsList[0]				# event type string
 		idx = len(argsList)-6
-		bDummy = false
+		bDummy = False
 		self.bDbg, bDummy, self.bAlt, self.bCtrl, self.bShift, self.bAllowCheats = argsList[idx:]
 		ret = 0
 		if self.EventHandlerMap.has_key(tag):
@@ -199,9 +199,25 @@ class CvEventManager:
 			CvUtil.pyPrint(message)
 		return 0
 
-			
-	if eventType == 'onClickedButton':
-		self.onClickedButton(argsList[1:])
+#################### HANDLE INPUTS ######################
+	def handleInput(self, argsList):
+		self.origArgsList = argsList	# point to original
+		tag = argsList[0]				# event type string
+		data1 = tag.getData1()
+		buttonID = tag.getButtonID()
+		CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "HANDLING INPUTS", "", 0, "", gc.getInfoTypeForString("COLOR_BLUE"), 0.0, 0.0, False, False)
+		if data1 == 9999:  # Trade Minister popup
+			if buttonID == 0:
+				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Locals selected", "", 0, "", gc.getInfoTypeForString("COLOR_GREEN"), 0.0, 0.0, False, False)
+				# TODO: Launch Locals trade screen
+			elif buttonID == 1:
+				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Africa selected", "", 0, "", gc.getInfoTypeForString("COLOR_GREEN"), 0.0, 0.0, False, False)
+				# TODO: Launch Africa trade screen
+			elif buttonID == 2:
+				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Caribbean selected", "", 0, "", gc.getInfoTypeForString("COLOR_GREEN"), 0.0, 0.0, False, False)
+				# TODO: Launch Caribbean trade screen
+			return 1  # Mark as handled
+
 
 #################### ON EVENTS ######################
 	def onKbdEvent(self, argsList):
@@ -269,6 +285,10 @@ class CvEventManager:
 	def onInit(self, argsList):
 		'Called when Civ starts up'
 		CvUtil.pyPrint( 'OnInit' )
+  
+	def EventSummonTradeMinister(self, argsList):
+		playerID = argsList[0]
+		self.launchTradeMinisterPopup(playerID, 9999)
 
 	def onUpdate(self, argsList):
 		'Called every frame'
@@ -762,6 +782,7 @@ class CvEventManager:
 	def onMouseEvent(self, argsList):
 		'mouse handler - returns 1 if the event was consumed'
 		eventType,mx,my,px,py,interfaceConsumed,screens = argsList
+		CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, str(argsList[5]), "", 0, "", gc.getInfoTypeForString("COLOR_GREEN"), 0, 0, False, False)
 		if ( px!=-1 and py!=-1 ):
 			if ( eventType == self.EventLButtonDown ):
 				if (self.bAllowCheats and self.bCtrl and self.bAlt and CyMap().plot(px,py).isCity() and not interfaceConsumed):
@@ -782,33 +803,14 @@ class CvEventManager:
 		return 0
 
 
-	def onClickedButton(self, argsList):
-		popupType = argsList[0]
-		selection = argsList[1]
-
-		if popupType == ButtonPopupTypes.BUTTONPOPUP_PYTHON:
-			if selection == 0:
-				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10,
-										"Locals selected", "", 0, "",
-										gc.getInfoTypeForString("COLOR_GREEN"), 0, 0,
-										False, False)
-				# TODO: Launch Locals trade screen
-			
-			elif selection == 1:
-				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10,
-										"Africa selected", "", 0, "",
-										gc.getInfoTypeForString("COLOR_GREEN"), 0, 0,
-										False, False)
-				# TODO: Launch Africa trade screen
-			elif selection == 2:
-				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10,
-										"Caribbean selected", "", 0, "",
-										gc.getInfoTypeForString("COLOR_GREEN"), 0, 0,
-										False, False)
-				# TODO: Launch Caribbean trade screen
-
-
 #################### TRIGGERED EVENTS ##################
+
+	def __eventSummonTradeMinisterBegin(self, playerID, userData, popupReturn):
+		CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Summoning Trade Minister", "", 0, "", gc.getInfoTypeForString("COLOR_YELLOW"), 0, 0, False, False)
+
+	def __eventSummonTradeMinisterApply(self, playerID, userData, popupReturn):
+		CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "Summoning Trade Minister", "", 0, "", gc.getInfoTypeForString("COLOR_YELLOW"), 0, 0, False, False)
+
 
 	def __eventEditCityNameBegin(self, city, bRename):
 		popup = CyPopup(CvUtil.EventEditCityName, EventContextTypes.EVENTCONTEXT_ALL, True)
@@ -1048,5 +1050,5 @@ class CvEventManager:
 	def __eventWBStartYearPopupApply(self, playerID, userData, popupReturn):
 		iStartYear = popupReturn.getSpinnerWidgetValue(int(0))
 		CvScreensInterface.getWorldBuilderScreen().setStartYearCB(iStartYear)
-	
-	
+  
+  
