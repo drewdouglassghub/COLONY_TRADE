@@ -456,7 +456,8 @@ class CvMainInterface:
 		popup = CyPopupInfo()
 		popup.setButtonPopupType(ButtonPopupTypes.BUTTONPOPUP_PYTHON)
 		popup.setData1(9999)  # Unique ID for routing in handleInput
-		popup.setText("Choose a trade partner:")
+		popup.setOnClickedPythonCallback("onSummonTradeMinister")
+		popup.setText("Choose a trade minister:")
 		popup.addPythonButton("Locals", "")
 		popup.addPythonButton("Africa", "")
 		popup.addPythonButton("Caribbean", "")
@@ -2979,10 +2980,11 @@ class CvMainInterface:
 			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_CLOSE_SCREEN):
 				CyInterface().clearSelectedCities()		
     
-			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == 5001) :
-				
+			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == 5001) :	
 				self.launchTradeMinisterPopup()
-			
+		
+			elif (inputClass.getData1() == 9999):
+				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "CLICK", "", 0, "", gc.getInfoTypeForString("COLOR_YELLOW"), 0, 0, False, False)
 		return 0
 	
 	# Updates the Screen

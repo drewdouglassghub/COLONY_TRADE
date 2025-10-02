@@ -1578,7 +1578,7 @@
 			<PythonCanDo/>
 			<PythonCanDoCity/>
 			<PythonCanDoUnit/>
-			<PythonCallback>EventSummonTradeMinister</PythonCallback>
+			<PythonCallback>onSummonTradeMinister</PythonCallback>
 		</EventTriggerInfo>
 	</EventTriggerInfos>
 </Civ4EventTriggerInfos>

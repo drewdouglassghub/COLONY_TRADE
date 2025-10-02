@@ -2238,7 +2238,7 @@
 			<AdditionalEvents/>
 			<EventTimes/>
 			<ClearEvents/>
-			<PythonCallback>EventSummonTradeMinister</PythonCallback>
+			<PythonCallback>onSummonTradeMinister</PythonCallback>
 			<PythonExpireCheck/>
 			<PythonCanDo/>
 			<PythonHelp/>
