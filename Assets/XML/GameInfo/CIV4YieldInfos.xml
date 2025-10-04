@@ -1,0 +1,15 @@
+<ElementType name="YieldInfo" content="eltOnly">
+    <YieldInfos>
+        <YieldInfo>
+            <Type>YIELD_TOBACCO</Type>
+            <Description>TXT_KEY_YIELD_TOBACCO</Description>
+            <bLocalTradeAllowed>1</bLocalTradeAllowed>
+        </YieldInfo>
+        <YieldInfo>
+            <Type>YIELD_SILVER</Type>
+            <Description>TXT_KEY_YIELD_SILVER</Description>
+            <bLocalTradeAllowed>0</bLocalTradeAllowed>
+        </YieldInfo>
+    </YieldInfos>
+    <Element name="bLocalTradeAllowed" type="Boolean"/>
+</ElementType>
