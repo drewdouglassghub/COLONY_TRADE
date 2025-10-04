@@ -208,6 +208,11 @@ def getIcon(iconEntry):						# returns Font Icons
 	else:
 		return (u"%c" %(191,))
 
+def checkArtPath(self, name, screen):
+	x = int(self.X_IN_PORT + self.IN_PORT_PANE_WIDTH - (self.W_TEXT_MARGIN / 2))
+	y = int(self.Y_UPPER_EDGE + self.RECRUIT_PANE_HEIGHT + self.H_TEXT_MARGIN + self.H_DOCK + 60)
+	return screen.addDDSGFC("EuropeScreenMessageImage", ArtFileMgr.getInterfaceArtInfo(name).getPath(),int(self.X_IN_PORT + self.IN_PORT_PANE_WIDTH - (self.W_TEXT_MARGIN / 2)),int(self.Y_UPPER_EDGE + self.RECRUIT_PANE_HEIGHT + self.H_TEXT_MARGIN + self.H_DOCK + 60),int(self.PANE_WIDTH),int(self.H_DOCK),WidgetTypes.WIDGET_GENERAL,-1,-1)
+ 
 def combatDetailMessageBuilder(cdUnit, ePlayer, iChange):
 	if (cdUnit.iExtraCombatPercent != 0):
 		msg=localText.getText("TXT_KEY_COMBAT_MESSAGE_EXTRA_COMBAT_PERCENT",(cdUnit.iExtraCombatPercent * iChange,))

@@ -2983,9 +2983,7 @@ class CvMainInterface:
 			elif (inputClass.getButtonType() == WidgetTypes.WIDGET_GENERAL and inputClass.getData1() == 5001) :	
 				self.launchTradeMinisterPopup()
 		
-			elif (inputClass.getData1() == 9999):
-				CyInterface().addMessage(gc.getGame().getActivePlayer(), True, 10, "CLICK", "", 0, "", gc.getInfoTypeForString("COLOR_YELLOW"), 0, 0, False, False)
-		return 0
+			return 0
 	
 	# Updates the Screen
 	def update( self, fDelta ):

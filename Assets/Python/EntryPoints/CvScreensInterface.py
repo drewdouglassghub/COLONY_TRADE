@@ -9,6 +9,7 @@ import CvRevolutionAdvisor
 import CvMilitaryAdvisor
 import CvEuropeScreen
 import CvVictoryScreen
+import CvNativeTradeScreen
 
 import CvOptionsScreen
 import CvReplayScreen
@@ -28,7 +29,6 @@ import CvWorldBuilderScreen
 import CvWorldBuilderDiplomacyScreen
 
 import CvDebugTools
-# import CvNativeTradeScreen
 import CvUtil
 import CvEventInterface
 import CvPopupInterface
@@ -60,11 +60,10 @@ def numPlotListButtons():
 	return mainInterface.numPlotListButtons()
 
 
-
-# nativeTradeScreen = CvNativeTradeScreen.CvNativeTradeScreen()
-# def showNativeTradeScreen():
-#     if (-1 != CyGame().getActivePlayer()):
-#     	nativeTradeScreen.interfaceScreen(argsList[0])
+nativeTradeScreen = CvNativeTradeScreen.CvNativeTradeScreen()
+def showNativeTradeScreen(argsList):
+    if (-1 != CyGame().getActivePlayer()):
+    	nativeTradeScreen.interfaceScreen()
 
 fatherScreen = CvFoundingFatherScreen.CvFoundingFatherScreen()
 def showFoundingFatherScreen(argsList):
@@ -147,10 +146,9 @@ def showVictoryScreen(argsList):
 
 def onSummonTradeMinister(argsList):
 	buttonID = argsList[0]
-	popupID = argsList[1]
 
 	if buttonID == 0:
-		showEuropeScreen(-1)
+		showNativeTradeScreen(-1)
 		# TODO: Launch Locals trade screen
 	elif buttonID == 1:
 		showEuropeScreen(-1)
