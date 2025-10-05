@@ -61,9 +61,10 @@
 			<SeaPlotYieldChanges/>
 			<RiverPlotYieldChanges/>
 			<YieldChanges>
-				<iYieldChange>1</iYieldChange> <!-- FOOD -->
-				<iYieldChange>0</iYieldChange> <!-- LUMBER -->
-				<iYieldChange>0</iYieldChange> <!-- ORE -->
+				<YieldChange>
+					<YieldType>YIELD_FOOD</YieldType>
+					<iYieldChange>1</iYieldChange>
+				</YieldChange>
 			</YieldChanges>
 			<YieldModifiers/>
 			<ConstructSound/>
@@ -137,9 +138,14 @@
 			<SeaPlotYieldChanges/>
 			<RiverPlotYieldChanges/>
 			<YieldChanges>
-				<iYieldChange>3</iYieldChange> <!-- FOOD -->
-				<iYieldChange>0</iYieldChange> <!-- LUMBER -->
-				<iYieldChange>0</iYieldChange> <!-- ORE -->
+					<YieldChange>
+					<YieldType>YIELD_FOOD</YieldType>
+					<iYieldChange>3</iYieldChange>
+				</YieldChange>
+				<YieldChange>
+					<YieldType>YIELD_TOOLS</YieldType>
+					<iYieldChange>1</iYieldChange>
+				</YieldChange>
 			</YieldChanges>
 			<YieldModifiers/>
 			<ConstructSound/>

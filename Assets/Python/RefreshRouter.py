@@ -2,7 +2,6 @@ from CvPythonExtensions import *
 gc = CyGlobalContext()
 
 
-
 class RefreshRouter:
     def __init__(self):
         self.DIRTY_BIT = InterfaceDirtyBits.EuropeScreen_DIRTY_BIT  # ✅ moved here
